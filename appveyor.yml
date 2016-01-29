@@ -1,0 +1,34 @@
+version: 1.0.{build}
+os: Visual Studio 2015
+configuration: Release
+shallow_clone: true
+init:
+- cmd: 
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+cache: C:\Users\appveyor\.dnx\packages
+before_build:
+- cmd: >-
+    set DNX_BUILD_VERSION=build-%APPVEYOR_BUILD_NUMBER%
+
+    set DNU_PUBLISH_AZURE=1
+
+    dnvm upgrade
+
+    dnvm upgrade -r coreclr
+
+    dnu restore
+build:
+  verbosity: minimal
+after_build:
+- cmd: >-
+    dnu publish DeployTest -o AppOutput\DeployTest --configuration Release --no-source --runtime dnx-coreclr-win-x64.1.0.0-rc1-update1 --wwwroot "wwwroot" --wwwroot-out "wwwroot" --iis-command "web" --quiet
+test: off
+artifacts:
+- path: AppOutput\DeployTest
+  name: DeployTest
+  type: WebDeployPackage
