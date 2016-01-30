@@ -47,3 +47,4 @@ deploy:
   password:
     secure: iM1VAstTm7iOtnDkmIOanIZgM1lx8vx/TqEAORKcNfdUbA5mgklUsPyW0hGPjn52uxbz7zbljacjdyVU0q/iLA==
   aspnet_core: true
+  aspnet5: true
