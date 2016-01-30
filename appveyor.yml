@@ -1,34 +1,49 @@
 version: 1.0.{build}
+
 os: Visual Studio 2015
+
 configuration: Release
+
 shallow_clone: true
-init:
-- cmd: 
+
+environment:
+  aspnet_webdeploy_good_psw:
+    secure: 2VXyhj2nXYFYFLwblWwyAoJVjx6T5j7sSszW+4u1rUuGb8yZjfcGSQGUZyVx8btXHRV9q9SLfmd6RhfEtPLlwQ==
+
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+  
 cache: C:\Users\appveyor\.dnx\packages
+
 before_build:
-- cmd: >-
-    set DNX_BUILD_VERSION=build-%APPVEYOR_BUILD_NUMBER%
+- set DNX_BUILD_VERSION=build-%APPVEYOR_BUILD_NUMBER%
+- dnvm upgrade
+- dnvm upgrade -r coreclr
+- dnu restore
 
-    set DNU_PUBLISH_AZURE=1
-
-    dnvm upgrade
-
-    dnvm upgrade -r coreclr
-
-    dnu restore
 build:
   verbosity: minimal
+
 after_build:
-- cmd: >-
-    dnu publish DeployTest -o AppOutput\DeployTest --configuration Release --no-source --runtime dnx-coreclr-win-x64.1.0.0-rc1-update1 --wwwroot "wwwroot" --wwwroot-out "wwwroot" --iis-command "web" --quiet
+- dnu publish DeployTest -o AppOutput\DeployTest --configuration Release --no-source --runtime dnx-coreclr-win-x64.1.0.0-rc1-update1 --wwwroot "wwwroot" --wwwroot-out "wwwroot" --iis-command "web" --quiet
+- "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -source:IisApp='C:\projects\appveyor-deploy-test\AppOutput\DeployTest\wwwroot' -dest:IisApp='aspnet-webdeploy-good',ComputerName='https://aspnet-webdeploy-good.scm.azurewebsites.net/msdeploy.axd',UserName='$aspnet-webdeploy-good',Password='%aspnet_webdeploy_good_psw%',IncludeAcls='False',AuthType='Basic' -verb:sync -enableLink:contentLibExtension  -enableRule:DoNotDeleteRule -useCheckSum -retryAttempts:2
+
 test: off
+
 artifacts:
 - path: AppOutput\DeployTest
   name: DeployTest
   type: WebDeployPackage
+
+deploy:
+- provider: WebDeploy
+  server: https://aspnet-webdeploy-bad.scm.azurewebsites.net/msdeploy.axd
+  website: aspnet-webdeploy-bad
+  username: $aspnet-webdeploy-bad
+  password:
+    secure: iM1VAstTm7iOtnDkmIOanIZgM1lx8vx/TqEAORKcNfdUbA5mgklUsPyW0hGPjn52uxbz7zbljacjdyVU0q/iLA==
+  aspnet_core: true
