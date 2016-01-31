@@ -1,7 +1,7 @@
 version: 1.0.{build}
 
-#os: Visual Studio 2015
-os: test
+os: Visual Studio 2015
+#os: test
 
 configuration: Release
 
@@ -53,5 +53,5 @@ deploy:
   password:
     secure: iM1VAstTm7iOtnDkmIOanIZgM1lx8vx/TqEAORKcNfdUbA5mgklUsPyW0hGPjn52uxbz7zbljacjdyVU0q/iLA==
   aspnet_core: true
-  aspnet5: true
+#  aspnet5: true
   aspnet_core_force_restart: true
