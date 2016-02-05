@@ -36,7 +36,7 @@ after_build:
 - dnu publish DeployTest -o AppOutput\DeployTest --configuration Release --no-source --runtime dnx-coreclr-win-x64.1.0.0-rc1-update1 --wwwroot "wwwroot" --wwwroot-out "wwwroot" --iis-command "web" --quiet
 - dir AppOutput\DeployTest\wwwroot
 - type AppOutput\DeployTest\wwwroot\web.config
-- '"C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -source:IisApp=''%appveyor_build_folder%\AppOutput\DeployTest\wwwroot'' -dest:IisApp=''aspnet-webdeploy-good'',ComputerName=''https://aspnet-webdeploy-good.scm.azurewebsites.net/msdeploy.axd'',UserName=''$aspnet-webdeploy-good'',Password=''%aspnet_webdeploy_good_psw%'',IncludeAcls=''False'',AuthType=''Basic'' -verb:sync -enableLink:contentLibExtension  -enableRule:DoNotDeleteRule -useCheckSum -retryAttempts:2'
+- '"C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -source:IisApp=''%appveyor_build_folder%\AppOutput\DeployTest\wwwroot'' -dest:IisApp=''aspnet-webdeploy-good'',ComputerName=''https://aspnet-webdeploy-good.scm.azurewebsites.net/msdeploy.axd'',UserName=''$aspnet-webdeploy-good'',Password=''%aspnet_webdeploy_good_psw%'',IncludeAcls=''False'',AuthType=''Basic'' -verb:sync -enableLink:contentLibExtension  -enableRule:DoNotDeleteRule -retryAttempts:2'
 
 test: off
 
@@ -52,6 +52,7 @@ deploy:
   username: $aspnet-webdeploy-bad
   password:
     secure: iM1VAstTm7iOtnDkmIOanIZgM1lx8vx/TqEAORKcNfdUbA5mgklUsPyW0hGPjn52uxbz7zbljacjdyVU0q/iLA==
+  do_not_use_checksum: true
   aspnet_core: true
 #  aspnet5: true
   aspnet_core_force_restart: true
