@@ -53,6 +53,7 @@ deploy:
   password:
     secure: iM1VAstTm7iOtnDkmIOanIZgM1lx8vx/TqEAORKcNfdUbA5mgklUsPyW0hGPjn52uxbz7zbljacjdyVU0q/iLA==
   do_not_use_checksum: true
+  pre_sync: ss
   aspnet_core: true
 #  aspnet5: true
   aspnet_core_force_restart: true
