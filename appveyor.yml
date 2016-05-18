@@ -21,7 +21,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
   
-cache: C:\Users\appveyor\.dnx\packages
+#cache: C:\Users\appveyor\.dnx\packages
 
 before_build:
 - set DNX_BUILD_VERSION=build-%APPVEYOR_BUILD_NUMBER%
